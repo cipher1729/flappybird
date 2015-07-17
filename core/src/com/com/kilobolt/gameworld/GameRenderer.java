@@ -3,7 +3,9 @@ package com.com.kilobolt.gameworld;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.com.kilobolt.com.kilobolt.assetloader.assetloader;
 import com.com.kilobolt.gameobjects.Bird;
@@ -21,6 +23,12 @@ public class GameRenderer {
 
     private int midPointY;
     private int gameHeight;
+    private Bird bird;
+    private TextureRegion bg, grass;
+    private Animation birdAnimation;
+    private TextureRegion birdMid, birdDown, birdUp;
+    private TextureRegion skullUp, skullDown, bar;
+
 
     public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
         myWorld = world;
@@ -38,12 +46,30 @@ public class GameRenderer {
         batcher.setProjectionMatrix(cam.combined);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
+        // Call helper methods to initialize instance variables
+        initGameObjects();
+        initAssets();
     }
 
+    private void initGameObjects()
+    {
+        bird = myWorld.getBird();
+    }
+    private void initAssets() {
+        bg = assetloader.bg;
+        grass = assetloader.grass;
+        birdAnimation = assetloader.birdAnimation;
+        birdMid = assetloader.bird;
+        birdDown = assetloader.birdDown;
+        birdUp = assetloader.birdUp;
+        skullUp = assetloader.skullUp;
+        skullDown = assetloader.skullDown;
+        bar = assetloader.bar;
+    }
     public void render(float runTime) {
 
         // We will move these outside of the loop for performance later.
-        Bird bird = myWorld.getBird();
+
 
         // Fill the entire screen with black, to prevent potential flickering.
         Gdx.gl.glClearColor(0, 0, 0, 1);
@@ -80,8 +106,17 @@ public class GameRenderer {
 
         // Draw bird at its coordinates. Retrieve the Animation object from AssetLoader
         // Pass in the runTime variable to get the current frame.
-        batcher.draw(assetloader.birdAnimation.getKeyFrame(runTime),
-                bird.getX(), bird.getY(), bird.getWidth(), bird.getHeight());
+        if (bird.shouldntFlap()) {
+            batcher.draw(birdMid, bird.getX(), bird.getY(),
+                    bird.getWidth() / 2.0f, bird.getHeight() / 2.0f,
+                    bird.getWidth(), bird.getHeight(), 1, 1, bird.getRotation());
+
+        } else {
+            batcher.draw(birdAnimation.getKeyFrame(runTime), bird.getX(),
+                    bird.getY(), bird.getWidth() / 2.0f,
+                    bird.getHeight() / 2.0f, bird.getWidth(), bird.getHeight(),
+                    1, 1, bird.getRotation());
+        }
 
         // End SpriteBatch
         batcher.end();
