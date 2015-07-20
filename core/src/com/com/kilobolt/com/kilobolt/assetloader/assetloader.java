@@ -1,6 +1,7 @@
 package com.com.kilobolt.com.kilobolt.assetloader;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -15,10 +16,12 @@ public class assetloader {
     public static Animation birdAnimation;
     public static TextureRegion bird, birdDown, birdUp;
     public static TextureRegion skullUp, skullDown, bar;
+    public static Sound dead;
 
     public static void load()
     {
         texture = new Texture(Gdx.files.internal("texture.png"));
+        dead = Gdx.audio.newSound(Gdx.files.internal("dead.wav"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         bg = new TextureRegion(texture, 0, 0, 136, 43);
