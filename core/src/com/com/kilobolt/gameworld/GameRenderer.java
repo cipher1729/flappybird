@@ -180,7 +180,7 @@ public class GameRenderer {
                     1, 1, bird.getRotation());
         }
 
-        batcher.end();
+        //batcher.end();
 
         /*
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -216,6 +216,15 @@ public class GameRenderer {
 
         shapeRenderer.end();
     */
+        String score = myWorld.getScore() + "";
+        // Draw shadow first
+        assetloader.shadow.draw(batcher, "" + myWorld.getScore(), (136 / 2)
+                - (3 * score.length()), 12);
+        // Draw text
+        assetloader.font.draw(batcher, "" + myWorld.getScore(), (136 / 2)
+                - (3 * score.length() - 1), 11);
+
+        batcher.end();
     }
 
 }

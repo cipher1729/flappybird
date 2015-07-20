@@ -2,6 +2,7 @@ package com.com.kilobolt.gameobjects;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.com.kilobolt.com.kilobolt.assetloader.assetloader;
 import com.com.kilobolt.gameworld.GameWorld;
 
 /**
@@ -17,7 +18,7 @@ public class Bird {
     private int width;
     private int height;
     private Circle boundingCircle;
-
+    private boolean alive;
     public Bird(float x, float y, int width, int height) {
         this.width = width;
         this.height = height;
@@ -25,9 +26,16 @@ public class Bird {
         velocity = new Vector2(0, 0);
         acceleration = new Vector2(0, 460);
         boundingCircle = new Circle();
+        alive= true;
     }
 
     public void update(float delta) {
+
+        // CEILING CHECK
+        if (position.y < -13) {
+            position.y = -13;
+            velocity.y = 0;
+        }
 
         velocity.add(acceleration.cpy().scl(delta));
         boundingCircle.set(position.x + 9, position.y+ 6, 6.5f);
@@ -44,7 +52,7 @@ public class Bird {
             }
         }
 
-        if (isFalling()) {
+        if (isFalling() || !isAlive()) {
             rotation += 480 * delta;
             if (rotation > 90) {
                 rotation = 90;
@@ -53,7 +61,12 @@ public class Bird {
         }
     }
     public void onClick() {
-        velocity.y = -140;
+
+        if(isAlive())
+        {
+            assetloader.flap.play();
+            velocity.y = -140;
+        }
     }
 
     public float getX() {
@@ -80,11 +93,25 @@ public class Bird {
         return velocity.y>110;
     }
     public boolean shouldntFlap() {
-        return velocity.y > 70;
+        return (velocity.y > 70 || !isAlive());
     }
 
     public Circle getBoundingCircle() {
         return boundingCircle;
     }
 
+    public boolean isAlive() {
+        return alive;
+    }
+
+    public  void die()
+    {
+        alive = false;
+        velocity.y=0;
+    }
+
+    public void decelerate()
+    {
+        acceleration.y=0;
+    }
 }
