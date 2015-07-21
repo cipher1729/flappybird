@@ -67,6 +67,7 @@ public class Pipe extends scrollable {
 
     public boolean collides(Bird bird) {
         if (position.x < bird.getX() + bird.getWidth()) {
+
             return (Intersector.overlaps(bird.getBoundingCircle(), barUp)
                     || Intersector.overlaps(bird.getBoundingCircle(), barDown)
                     || Intersector.overlaps(bird.getBoundingCircle(), skullUp) || Intersector
@@ -80,6 +81,12 @@ public class Pipe extends scrollable {
     }
     public void setScored(boolean b) {
         isScored = b;
+    }
+
+    public void onRestart(float x, float scrollSpeed)
+    {
+        velocity.x=scrollSpeed;
+        reset(x);
     }
 
 }

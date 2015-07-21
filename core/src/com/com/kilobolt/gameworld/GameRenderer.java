@@ -148,12 +148,12 @@ public class GameRenderer {
         shapeRenderer.rect(0, midPointY + 77, 136, 52);
 
         shapeRenderer.end();
-
+    /*
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.circle(bird.getBoundingCircle().x, bird.getBoundingCircle().y, bird.getBoundingCircle().radius);
         shapeRenderer.end();
-
+    */
         batcher.begin();
         batcher.disableBlending();
         batcher.draw(bg, 0, midPointY + 23, 136, 43);
@@ -216,6 +216,25 @@ public class GameRenderer {
 
         shapeRenderer.end();
     */
+        if (myWorld.isReady()) {
+            // Draw shadow first
+            assetloader.shadow.draw(batcher, "Touch me", (136 / 2)
+                    - (42), 76);
+            // Draw text
+            assetloader.font.draw(batcher, "Touch me", (136 / 2)
+                    - (42 - 1), 75);
+        } else {
+
+            if (myWorld.isGameOver()) {
+                assetloader.shadow.draw(batcher, "Game Over", 25, 56);
+                assetloader.font.draw(batcher, "Game Over", 24, 55);
+
+                assetloader.shadow.draw(batcher, "Try again?", 23, 76);
+                assetloader.font.draw(batcher, "Try again?", 24, 75);
+
+
+            }
+        }
         String score = myWorld.getScore() + "";
         // Draw shadow first
         assetloader.shadow.draw(batcher, "" + myWorld.getScore(), (136 / 2)

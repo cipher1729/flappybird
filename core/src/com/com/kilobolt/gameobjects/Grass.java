@@ -11,4 +11,9 @@ public class Grass extends scrollable {
     {
         super(x,y,width,height,scrollspeed);
     }
+    public void onRestart(float x, float scrollSpeed)
+    {
+        position.x = x;
+        velocity.x = scrollSpeed;
+    }
 }

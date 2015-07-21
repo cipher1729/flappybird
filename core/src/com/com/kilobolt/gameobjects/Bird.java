@@ -114,4 +114,16 @@ public class Bird {
     {
         acceleration.y=0;
     }
+
+    public void onRestart(int y)
+    {
+        position.y=y;
+        velocity.y=0;
+        velocity.x=0;
+        acceleration.x=0;
+        acceleration.y=460;
+
+        rotation=0;
+        alive= true;
+    }
 }

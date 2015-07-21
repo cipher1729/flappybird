@@ -1,5 +1,6 @@
 package com.com.kilobolt.gameworld;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
@@ -16,14 +17,35 @@ public class GameWorld {
     private boolean isAlive = true;
     private Rectangle ground;
     private int score = 0;
+    private int midPointY;
+
+    public enum GameState{
+        READY, RUNNING, GAMEOVER
+    }
+    private GameState currentState;
 
     public GameWorld(int midPointY) {
+        currentState = GameState.READY;
         bird = new Bird(33, midPointY - 5, 17, 12);
         scrollHandler = new ScrollHandler(this, midPointY+66);
         ground = new Rectangle(0, midPointY + 66, 136, 11);
+        currentState = GameState.READY;
+        this.midPointY= midPointY;
     }
 
     public void update(float delta) {
+        if (currentState == GameState.READY) {
+            updateReady(delta);
+
+        } else if (currentState == GameState.RUNNING) {
+            updateRunning(delta);
+
+        }
+    }
+
+    public void updateRunning(float delta)
+    {
+
         if (delta > .15f) {
             delta = .15f;
         }
@@ -40,6 +62,7 @@ public class GameWorld {
             scrollHandler.stop();
             bird.die();
             bird.decelerate();
+            currentState = GameState.GAMEOVER;
         }
     }
 
@@ -57,4 +80,29 @@ public class GameWorld {
         score += increment;
     }
 
+    public boolean isReady()
+    {
+        return (currentState==GameState.READY);
+    }
+
+    public void start() {
+        currentState = GameState.RUNNING;
+    }
+
+    public boolean isGameOver() {
+        return (currentState == GameState.GAMEOVER);
+    }
+    public void restart()
+    {
+        currentState = GameState.READY;
+        score = 0;
+        bird.onRestart(midPointY - 5);
+        scrollHandler.onRestart();
+        currentState = GameState.READY;
+    }
+
+    public void updateReady(float delta)
+    {
+
+    }
 }
