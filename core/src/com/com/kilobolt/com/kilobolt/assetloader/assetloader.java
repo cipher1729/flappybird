@@ -1,6 +1,7 @@
 package com.com.kilobolt.com.kilobolt.assetloader;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -19,7 +20,7 @@ public class assetloader {
     public static TextureRegion skullUp, skullDown, bar;
     public static Sound dead, coin, flap;
     public static BitmapFont font, shadow;
-
+    public static Preferences prefs;
     public static void load()
     {
         texture = new Texture(Gdx.files.internal("texture.png"));
@@ -27,7 +28,10 @@ public class assetloader {
         flap = Gdx.audio.newSound(Gdx.files.internal("flap.wav"));
         coin = Gdx.audio.newSound(Gdx.files.internal("coin.wav"));
         texture.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-
+        prefs = Gdx.app.getPreferences("ZombieBird");
+        if (!prefs.contains("highScore")) {
+            prefs.putInteger("highScore", 0);
+        }
         bg = new TextureRegion(texture, 0, 0, 136, 43);
         bg.flip(false, true);
 
@@ -71,6 +75,12 @@ public class assetloader {
             dead.dispose();
             font.dispose();
             shadow.dispose();
-
         }
+    public static void setHighScore(int val) {
+        prefs.putInteger("highScore", val);
+        prefs.flush();
+    }
+    public static int getHighScore() {
+        return prefs.getInteger("highScore");
+    }
 }

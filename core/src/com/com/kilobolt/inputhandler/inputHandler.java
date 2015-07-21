@@ -24,8 +24,8 @@ public class inputHandler implements InputProcessor{
             gameWorld.start();
         }
         myBird.onClick();
-        if(gameWorld.isGameOver())
-        {
+        if (gameWorld.isGameOver() || gameWorld.isHighScore()) {
+            // Reset all variables, go to GameState.READ
             gameWorld.restart();
         }
         return true; // Return true to say we handled the touch.
